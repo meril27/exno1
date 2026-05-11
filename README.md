@@ -194,10 +194,124 @@ data
 ```
 <img width="1127" height="711" alt="image" src="https://github.com/user-attachments/assets/34562354-2df4-4cd9-88c9-343902b647cb" />
 
+## IQR Method:
 
+```
+import pandas as pd
+ir=pd.read_csv("iris.csv")
+ir
+```
+<img width="596" height="437" alt="image" src="https://github.com/user-attachments/assets/e1f272a3-c007-461b-806c-932a19e82b3d" />
+<br>
 
+```
+ir.describe()
+```
+<img width="492" height="297" alt="image" src="https://github.com/user-attachments/assets/42b6875c-f9f2-45e5-907d-0028e2827040" />
+<br>
 
+```
+ir.shape
+```
+```
+(150, 5)
+```
+```
+ir.info()
+```
+<img width="458" height="257" alt="image" src="https://github.com/user-attachments/assets/f21eddb3-adbf-488d-8536-1841ada8cbc0" />
+<br>
 
+```
+import seaborn as sns
+sns.boxplot(x='sepal_width',data=ir)
+```
+<img width="712" height="582" alt="image" src="https://github.com/user-attachments/assets/3d3d87bb-6a26-4dd6-adb1-ef4940144a48" />
+<br>
+
+```
+ q1=ir.sepal_width.quantile(0.25)
+ q3=ir.sepal_width.quantile(0.75)
+ iqr=q3-q1
+ print(iqr)
+```
+
+```
+0.5
+```
+
+```
+ out=ir[((ir.sepal_width<(q1-1.5*iqr))|(ir.sepal_width>(q3+1.5*iqr)))]
+ out['sepal_width']
+```
+<img width="326" height="116" alt="image" src="https://github.com/user-attachments/assets/69f268f2-cbdd-44f1-91c9-7d1d18edd8ba" />
+<br>
+
+```
+ nor=ir[~((ir.sepal_width<(q1-1.5*iqr))|(ir.sepal_width>(q3+1.5*iqr)))]
+ nor['sepal_width']
+```
+<img width="487" height="268" alt="image" src="https://github.com/user-attachments/assets/8cd9c592-4cef-438e-80b4-0cfa70e4851b" />
+<br>
+
+```
+sns.boxplot(x='sepal_width',data=nor)
+```
+<img width="672" height="578" alt="image" src="https://github.com/user-attachments/assets/d7418248-5fab-4f5a-9f6f-37dc460b6946" />
+<br>
+
+Z-Score Method:
+
+```
+import numpy as np
+import pandas as pd
+df=pd.read_csv("heights.csv")
+df
+```
+<img width="192" height="498" alt="image" src="https://github.com/user-attachments/assets/794dba04-7d41-486b-b285-838331195fd3" />
+<br>
+
+```
+import scipy.stats as stats
+q1 = df['height'].quantile(0.25)
+q2 = df['height'].quantile(0.5)
+q3 = df['height'].quantile(0.75)
+iqr = q3-q1
+iqr
+```
+
+```
+0.92499999999999998
+```
+
+```
+low = q1 - 1.5*iqr
+print(low)
+high = q3 + 1.5*iqr
+print(high)
+```
+<img width="205" height="55" alt="image" src="https://github.com/user-attachments/assets/8a498148-926d-4a86-b8c8-f2039a215273" />
+<br>
+
+```
+df1 = df[((df['height'] >=low)& (df['height'] <=high))]
+df1
+```
+<img width="213" height="433" alt="image" src="https://github.com/user-attachments/assets/1f6fd021-fb70-42a0-a771-08f3d41b78db" />
+<br>
+
+```
+z = np.abs(stats.zscore(df['height']))
+z
+```
+<img width="291" height="328" alt="image" src="https://github.com/user-attachments/assets/ef8a19f8-b8b5-459a-9349-e7b203282383" />
+<br>
+
+```
+df1 = df[z<3]
+df1
+```
+<img width="186" height="461" alt="image" src="https://github.com/user-attachments/assets/49cf82d1-ba8d-456c-b860-7a8dcc5d1c64" />
 
 # Result
 The given dataset was successfully read and cleaned using Python. Missing values and duplicate records were handled properly, and the cleaned data was saved into a new file named cleaned_data.csv.
